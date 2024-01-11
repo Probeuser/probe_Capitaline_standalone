@@ -230,7 +230,8 @@ except Exception as e :
     reason = "Invalid otp"
     tradeDate = ""
     comments = ""
-    updateDataScrapeLog("Capitaline_standalone",status,length,scraped_length,reason,comments,tradeDate)  
+    total_record_count = "NA"
+    updateDataScrapeLog("Capitaline_standalone",status,length,scraped_length,total_record_count,reason,comments,tradeDate)  
     print(traceback.format_exc())
     # Wait for the "Welcome Vasteam" profile link to be clickable
     profile_link = WebDriverWait(browser, 30).until(

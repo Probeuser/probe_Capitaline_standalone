@@ -270,8 +270,11 @@ def readExcelIntoDb(excel_file_path) :
         else :              
             comments = ""
         reason = ""
-        updateDataScrapeLog("Capitaline_standalone",status,length,scraped_length,reason,comments,tradeDate) 
-        print(f"Job done successfully data written on db for standalone ========== ,{scraped_length},{update_length}")
+        with mydb.cursor() as db_cursor:
+            db_cursor.execute("SELECT COUNT(*) FROM capitaline_new_download where NatureReport='S'")
+            total_record_count = db_cursor.fetchone()[0] 
+        updateDataScrapeLog("Capitaline_standalone",status,length,scraped_length,total_record_count,reason,comments,tradeDate) 
+        print(f"Job done successfully data written on db for standalone ========== ,{scraped_length},{update_length},{total_record_count}")
     except FileNotFoundError as e :
         print(traceback.format_exc())
         print(f"exception ======",str(e))
@@ -281,7 +284,8 @@ def readExcelIntoDb(excel_file_path) :
         reason = "No such file or directory "
         tradeDate = ""
         comments = ""
-        updateDataScrapeLog("Capitaline_standalone",status,length,scraped_length,reason,comments,tradeDate)  
+        total_record_count ="NA"
+        updateDataScrapeLog("Capitaline_standalone",status,length,scraped_length,total_record_count,reason,comments,tradeDate)  
         mail.send_email("Capitaline standalone SCRAP DATA from excel sheet ",reason ) 
     except Exception as e :
         print(f"exception ======",str(e))
@@ -292,5 +296,6 @@ def readExcelIntoDb(excel_file_path) :
         reason = "Error occurred"
         tradeDate = ""
         comments = ""
-        updateDataScrapeLog("Capitaline_standalone",status,length,scraped_length,reason,comments,tradeDate)  
+        total_record_count ="NA"
+        updateDataScrapeLog("Capitaline_standalone",status,length,scraped_length,total_record_count,reason,comments,tradeDate)  
         mail.send_email("Capitaline standalone SCRAP DATA from excel sheet ",str(e)) 
